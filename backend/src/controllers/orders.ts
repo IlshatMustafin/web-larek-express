@@ -4,7 +4,7 @@ import Product from '../models/product';
 import BadRequestError from '../errors/bad-request-error';
 import NotFoundError from '../errors/not-found-error';
 
-export const createOrder = async (req: Request, res: Response, next: NextFunction) => {
+const createOrder = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const {
       payment,
@@ -59,3 +59,5 @@ export const createOrder = async (req: Request, res: Response, next: NextFunctio
     next(err);
   }
 };
+
+export default createOrder;

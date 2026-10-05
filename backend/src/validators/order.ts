@@ -1,6 +1,6 @@
 import { Joi, celebrate, Segments } from 'celebrate';
 
-export const validateOrderBody = celebrate({
+const validateOrderBody = celebrate({
   [Segments.BODY]: Joi.object().keys({
     payment: Joi.string().valid('card', 'online').required(),
     email: Joi.string().email().required(),
@@ -10,3 +10,5 @@ export const validateOrderBody = celebrate({
     items: Joi.array().items(Joi.string().hex().length(24)).min(1).required(),
   }),
 });
+
+export default validateOrderBody;

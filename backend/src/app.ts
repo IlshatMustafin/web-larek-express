@@ -9,10 +9,10 @@ import NotFoundError from './errors/not-found-error';
 import errorHandler from './middlewares/error-handler';
 import { requestLogger, errorLogger } from './middlewares/logger';
 
-const { PORT = 3000 } = process.env;
+const { PORT = 3000, MONGO_URL = 'mongodb://127.0.0.1:27017/weblarek' } = process.env;
 const app = express();
 
-mongoose.connect('mongodb://127.0.0.1:27017/weblarek');
+mongoose.connect(MONGO_URL);
 
 app.use(cors());
 app.use(express.json());
