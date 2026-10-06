@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from 'express';
 import { faker } from '@faker-js/faker';
 import Product from '../models/product';
 import BadRequestError from '../errors/bad-request-error';
-import NotFoundError from '../errors/not-found-error';
 
 const createOrder = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -39,7 +38,7 @@ const createOrder = async (req: Request, res: Response, next: NextFunction) => {
 
     const notFound = items.filter((id) => !products.find((p) => p._id.toString() === id));
     if (notFound.length > 0) {
-      throw new NotFoundError(`Товары не найдены: ${notFound.join(', ')}`);
+      throw new BadRequestError(`Товары не найдены: ${notFound.join(', ')}`);
     }
 
     const notForSale = products.filter((p) => p.price === null);
