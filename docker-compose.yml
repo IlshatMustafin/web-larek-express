@@ -13,11 +13,6 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
-    healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
-      interval: 3s
-      timeout: 3s
-      retries: 5
     volumes:
       - db:/data/db
     networks:
@@ -29,14 +24,6 @@ services:
       context: backend
     env_file:
       - backend/.env
-    environment:
-      - PORT=3000
-      - DB_ADDRESS=mongodb://root:example@mongo:27017/weblarek
-      - UPLOAD_PATH=images
-      - UPLOAD_PATH_TEMP=temp
-      - ORIGIN_ALLOW=http://localhost:5173
-      - AUTH_REFRESH_TOKEN_EXPIRY=7d
-      - AUTH_ACCESS_TOKEN_EXPIRY=1m
     volumes:
       - ./backend/src:/app/src
       - public:/app/src/public
@@ -45,8 +32,7 @@ services:
     networks:
       - internal
     depends_on:
-      mongo:
-        condition: service_healthy
+      - mongo
 
   server:
     build:
