@@ -35,18 +35,19 @@ const createOrder = async (req: Request, res: Response, next: NextFunction) => {
     }
 
     const products = await Product.find({ _id: { $in: items } });
+    const priceMap = new Map(products.map((p) => [p._id.toString(), p.price]));
 
-    const notFound = items.filter((id) => !products.find((p) => p._id.toString() === id));
+    const notFound = items.filter((id) => !priceMap.has(id));
     if (notFound.length > 0) {
       throw new BadRequestError(`Товары не найдены: ${notFound.join(', ')}`);
     }
 
-    const notForSale = products.filter((p) => p.price === null);
+    const notForSale = items.filter((id) => priceMap.get(id) === null);
     if (notForSale.length > 0) {
       throw new BadRequestError('Некоторые товары не продаются');
     }
 
-    const sum = products.reduce((acc, p) => acc + (p.price ?? 0), 0);
+    const sum = items.reduce((acc, id) => acc + (priceMap.get(id) ?? 0), 0);
     if (sum !== total) {
       throw new BadRequestError('Неверная сумма заказа');
     }
